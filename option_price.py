@@ -1,0 +1,60 @@
+from ibapi.client import EClient
+from ibapi.wrapper import EWrapper
+from ibapi.contract import Contract
+from threading import Timer
+
+#stock_symbol = input("What ticker would you like?  ")
+#strike_number = float(input("What strike?   "))
+#expiration = float(input("What expiration (yyyymmdd)?   "))
+
+stock_symbol = "IBM"
+strike_number = 126
+expiration = 20201211
+
+class TestApp(EWrapper, EClient):
+
+    def __init__(self):
+        EClient.__init__(self, self)
+
+    def error(self, reqId, errorCode, errorString):
+        print("Error: ", reqId, " ", errorCode, " ", errorString)
+
+    def nextValidId(self, orderId):
+        self.start()
+
+    def contractDetails(self, reqID, contractDetails):
+        print("contractDetails: ", reqID, " ", contractDetails, "\n")
+
+    def contractDetailsEnd(self, reqId):
+        print("\ncontractDetails End\n")
+
+    def start(self):
+
+        contract = Contract()
+        contract.symbol = stock_symbol
+        contract.secType = "OPT"
+        contract.exchange = "SMART"
+        contract.currency = "USD"
+        contract.lastTradeDateOrContractMonth = expiration
+        contract.strike = strike_number
+        contract.right = "C"
+        contract.multiplier = "100"
+
+        self.reqMktData(1013, contract, "", False, False, [])
+        #self.calculateImpliedVolatility(5001, contract, 0.5, 55, [])
+        # self.reqMktData(1, contract, "", False, False, [])
+
+    def stop(self):
+        self.done = True
+        self.disconnect()
+
+def main():
+    app = TestApp()
+    app.nextOrderID = 0
+    app.connect("127.0.0.1", 7497, 0)
+
+    Timer(4, app.stop).start()
+    app.run()
+
+if __name__ == "__main__":
+    main()
