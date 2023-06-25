@@ -39,8 +39,8 @@ class TradeFire(EWrapper, EClient):
         contract.secType = "OPT"
         contract.exchange = "SMART"
         contract.currency = "USD"
-        contract.lastTradeDateOrContractMonth = "20201204"
-        contract.strike = 150
+        contract.lastTradeDateOrContractMonth = "20230630"
+        contract.strike = 40
         contract.right = "C"
         contract.multiplier = "100"
         order = Order()

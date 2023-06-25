@@ -32,18 +32,23 @@ class TradeFire(EWrapper, EClient):
         print("ExecDetails. ", reqId, contract.symbol, contract.secType, contract.currency, execution.execId,
               execution.orderId, execution.shares, execution.lastLiquidity)
 
+
     def start(self):
         contract = Contract()
-        contract.symbol = "TSLA"
-        contract.secType = "STK"
+        contract.symbol = "TQQQ"
+        contract.secType = "OPT"
         contract.exchange = "SMART"
         contract.currency = "USD"
-        contract.primaryExchange = "NASDAQ"
+        contract.lastTradeDateOrContractMonth = "20230630"
+        contract.strike = 40
+        contract.right = "C"
+        contract.multiplier = "100"
         order = Order()
-        order.action = "BUY"
-        order.totalQuantity = 100
+        order.action = "SELL"
+        order.totalQuantity = 1
+        # order.orderType = "MKT"
         order.orderType = "LMT"
-        order.lmtPrice = 250
+        order.lmtPrice = 2.00
         order.eTradeOnly = False
         order.firmQuoteOnly = False
         self.placeOrder(self.nextOrderId, contract, order)
@@ -57,7 +62,7 @@ def main():
     app = TradeFire()
     app.nextOrderId = 0
     # app.connect("127.0.0.1", 7497, 9) # TWS Live Money Account
-    app.connect("127.0.0.1", 7497, 10)  # IB Gateway PaperTrading
+    app.connect("127.0.0.1", 7497, 9)  # IB Gateway PaperTrading
     Timer(3, app.stop).start()
     app.run()
 

@@ -40,12 +40,10 @@ class TradeFire(EWrapper, EClient):
         contract.currency = "USD"
         contract.primaryExchange = "NASDAQ"
         order = Order()
-        order.action = "BUY"
+        order.action = "SELL"
         order.totalQuantity = 100
         order.orderType = "LMT"
-        order.lmtPrice = 250
-        order.eTradeOnly = False
-        order.firmQuoteOnly = False
+        order.lmtPrice = 500
         self.placeOrder(self.nextOrderId, contract, order)
 
     def stop(self):
@@ -57,7 +55,7 @@ def main():
     app = TradeFire()
     app.nextOrderId = 0
     # app.connect("127.0.0.1", 7497, 9) # TWS Live Money Account
-    app.connect("127.0.0.1", 7497, 10)  # IB Gateway PaperTrading
+    app.connect("127.0.0.1", 7497, 9)  # IB Gateway PaperTrading
     Timer(3, app.stop).start()
     app.run()
 
